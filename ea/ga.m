@@ -1,8 +1,8 @@
 function solution = ga(blobExample,orakel,elefant)
 % Setze Konfigurationsvariablen
 pc = 0.2;
-pm = 1;
-mutdist = 5;
+pm = 0.;
+mutdist = 0.1;
 
 popsize = 5;
 maxGen = 25;
