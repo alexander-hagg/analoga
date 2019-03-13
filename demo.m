@@ -9,14 +9,16 @@ figure(1); imagesc(elefant);
                                                                             
 
 %% % Zeige einen Blob
-blob = baueBlob(elefant);
+zahlGenen = 3;
+blob = baueBlob(zahlGenen,elefant);
 
 % Ist der Blob ein Elefant? Frag dem Orakel. Es weiß alles.
 [qualitaet,~] = orakel(blob,elefant);
 
-
-
 figure(2); zeigeblob(blob); 
 %title(['Blob: ' num2str(wieVieleRichtig) ' von ' num2str(numel(elefant))]);
-title(['Blob Qualität: ' num2str(qualitaet)]);
+title(['Blob Qualität: ' num2str(qualitaet) ' /100']);
 
+%% % Evolviere den Blob zum Elefanten
+[beispielBlob,blobGenen] = baueBlob(zahlGenen,elefant);
+solution = ga(blobGenen,@orakel,elefant)

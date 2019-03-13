@@ -1,11 +1,8 @@
-function [blob,blobGenen] = baueBlob(zahlGenen,elefant)
+function blob = zeigeBlob(blobGenen,elefant)
 
 
 wieGross = size(elefant,1);
 blob = ones(wieGross,wieGross);
-
-blobGenen = [0.3 1 1]'.*rand(3,zahlGenen);
-blobGenen(:,1:2) = [0.3,0.4,0.5; 0.4, 0.5, 0.7]';
 
 for i = 1:size(blobGenen,2)
     radius = floor(0.5*blobGenen(1,i)*wieGross);

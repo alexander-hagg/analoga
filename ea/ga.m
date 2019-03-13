@@ -1,5 +1,5 @@
-function solution = ga(fitnessFunction)
-%% GA config
+function solution = ga(blobExample,orakel,elefant)
+% Setze Konfigurationsvariablen
 pc = 0.2;
 pm = 1;
 mutdist = 5;
@@ -12,12 +12,27 @@ up = 10;
 domain = [low:0.01:up];
 maxruns = 1;
 
-%% GA
-
-pop = rand(popsize,1); pop = [pop fitnessFunction(pop(:,1))];
+% Initiiere Variablen
 elites = []; pops = []; gen = 1;
-colorsElites = [0:1/maxgen:1];colorsElites(end) = [];
-colorsPop = repmat(colorsElites,popsize,1);
+
+%% GA
+freshpopulation = rand(popsize,size(blobExample,1),size(blobExample,2));
+fixedGenes = repelem(blobExample(:,1:2),1,1,popsize); fixedGenes = permute(fixedGenes,[3 1 2]); 
+% Overwrite fixed genes
+freshpopulation(:,1:3,1:2) = fixedGenes;
+
+population = freshpopulation;
+
+
+for s=1:size(population,1)
+    zeigeBlob(squeeze(population(s,:,:)),elefant);
+    blob = zeigeBlob(squeeze(population(s,:,:)),elefant);
+    fitness = orakel(blob,elefant);
+end
+
+
+%%
+
 while gen <= maxgen
     
     [maxfit, elite] = max(pop(:,2),[],1);
@@ -42,7 +57,7 @@ while gen <= maxgen
     % Mutation
     sig = 1;        pm_ = pm * sig;         mutdist_ = mutdist * sig;
     newpop(:,1) = newpop(:,1) + (rand(popsize-1,1)-0.5).*(rand(popsize-1,1)<pm_)*mutdist_;
-    newpop(:,2) = fitnessFunction(newpop(:,1));
+    newpop(:,2) = orakel(newpop(:,1));
     % Elitism
     newpop = [pop(elite,:);newpop];
     pop = newpop;
