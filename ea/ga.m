@@ -5,7 +5,7 @@ pm = 1;
 mutdist = 5;
 
 popsize = 5;
-maxgen = 25;
+maxGen = 25;
 tsize = 2;
 low = 0;
 up = 10;
@@ -27,32 +27,31 @@ population = freshpopulation;
 for s=1:size(population,1)
     zeigeBlob(squeeze(population(s,:,:)),elefant);
     blob = zeigeBlob(squeeze(population(s,:,:)),elefant);
-    fitness = orakel(blob,elefant);
+    fitness(s) = orakel(blob,elefant);
 end
 
 
 %%
 
-while gen <= maxgen
+for gen = 1:maxGen
     
-    [maxfit, elite] = max(pop(:,2),[],1);
-    elites = [elites;pop(elite)];
-    pops = [pops,pop(:,1)];
-    newpop = zeros(popsize-1,2);
+    [maxfit(gen), elite] = max(fitness);
+    elites = [elites;squeeze(population(elite,:,:))];
+    newpop = zeros(size(population));
+    
     % Recombination
     % Selection
-    fits = pop(:,2);
     parents1 = randi(popsize-1,popsize-1,tsize);
-    [fit1, p] = max(fits(parents1),[],2);
-    Index1=sub2ind(size(pop(2:popsize,:)),1:popsize-1,p');
+    [fit1, p] = max(fitness(parents1),[],2);
+    Index1=sub2ind(size(population(2:popsize,:)),1:popsize-1,p');
     
     parents2 = randi(popsize-1,popsize-1,tsize);
-    [fit1, p] = max(fits(parents2),[],2);
-    Index2=sub2ind(size(pop(2:popsize,:)),1:popsize-1,p');
+    [fit1, p] = max(fitness(parents2),[],2);
+    Index2=sub2ind(size(population(2:popsize,:)),1:popsize-1,p');
     
-    parents = [pop(parents1(Index1)')' pop(parents2(Index2)')'];
+    parents = cat(4,population(parents1(Index1)',:,:), population(parents2(Index2)',:,:));
     % Crossover (simple arithmetic mean)
-    newpop(:,1) = mean(parents,2);
+    newpop(2:end,:,:) = mean(parents,4);
     
     % Mutation
     sig = 1;        pm_ = pm * sig;         mutdist_ = mutdist * sig;
@@ -61,5 +60,4 @@ while gen <= maxgen
     % Elitism
     newpop = [pop(elite,:);newpop];
     pop = newpop;
-    gen = gen + 1;
 end
