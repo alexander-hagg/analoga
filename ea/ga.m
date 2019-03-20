@@ -2,13 +2,14 @@ function [population,elite,maxfit] = ga(blobExample,orakel,elefant)
 % Setze Konfigurationsvariablen
 %pc = 0.8;
 pm = 2/numel(blobExample);
-mutdist = 0.3;
-popsize = 20;
+mutdist = 0.1;
+popsize = 12;
 maxGen = 1000;
 
 tsize = 2;
 drawProgress = true;
 
+x = [1:size(elefant,1)]; y = x; [imgGrid.X,imgGrid.Y] = ndgrid(x,y);
 
 % Initiiere Variablen
 elites = []; pops = [];
@@ -25,12 +26,26 @@ population = freshpopulation;
 
 
 for s=1:size(population,1)
-    blob = zeigeBlob(squeeze(population(s,:,:)),elefant);
+    blob = phenotypBlob(squeeze(population(s,:,:)),size(elefant,1),imgGrid);
     fitness(s) = orakel(blob,elefant);
 end
 
 
 %%
+h = figure(1);
+subplot(1,2,1);
+zeigeblob(elefant);
+axis tight manual % this ensures that getframe() returns a consistent size
+grid on; grid minor;
+filename = 'testAnimated.gif';
+% Capture the plot as an image
+frame = getframe(h);
+im = frame2im(frame);
+[imind,cm] = rgb2ind(im,2);
+% Write to the GIF File
+imwrite(imind,cm,filename,'gif', 'Loopcount',inf);
+startFrame = false;
+
 
 for gen = 1:maxGen
     disp([int2str(gen) '/' int2str(maxGen) ' - max fit: ' num2str(max(fitness))]);
@@ -49,7 +64,7 @@ for gen = 1:maxGen
     parents1 = randi(popsize,2*(popsize-1),tsize);
     firstBetter = fitness(parents1(:,1)) > fitness(parents1(:,2));
     parents1 = [parents1(firstBetter,1);parents1(~firstBetter,2)];
-     
+    
     % Biased SUS
     motherIDs = parents1(1:end/2);
     fatherIDs = parents1(end/2+1:end);
@@ -70,49 +85,57 @@ for gen = 1:maxGen
     
     % Mutation
     doMutation = rand(size(population))<pm;
-    mutationValue = randn(size(population))*mutdist;    
+    mutationValue = randn(size(population))*mutdist;
     newpop = newpop + mutationValue.*doMutation;
     
     % Clamp to boundary values
     newpop(newpop>1) = 1;
     newpop(newpop<0) = 0;
     radii = newpop(:,1,:);
-    radii(radii>0.3) = 0.3;
-    %radii(radii<0.05) = 0.05;
+    radii(radii>0.2) = 0.2;
     newpop(:,1,:) = radii;
     
-    %newpop(:,1:3,1:2) = fixedGenes;   
+    %newpop(:,1:3,1:2) = fixedGenes;
     % Elitism
     newpop(1,:,:) = population(elite,:,:);
     fitness(1) = maxfit(gen);
     
     population = newpop;
     for s=2:size(population,1)
-        blob = zeigeBlob(squeeze(population(s,:,:)),elefant);
+        blob = phenotypBlob(squeeze(population(s,:,:)),size(elefant,1),imgGrid);
         fitness(s) = orakel(blob,elefant);
     end
     
-    if drawProgress && ~mod(gen,100)
+    if drawProgress && ~mod(gen,20)
+        subplot(1,2,2);
         solution = squeeze(population(elite,:,:));
-        blob = phenotypBlob(solution,size(elefant,1));
-        figure(2); zeigeblob(blob); 
-        grid on; grid minor;
+        blob = phenotypBlob(solution,size(elefant,1),imgGrid);
+        %subplot(1,2,2);
+        zeigeblob(blob);
         title(['Gen: ' int2str(gen) ' Blob Qualität: ' num2str(maxfit(end)) ' /100']);
-        
-        for pp=2:size(population,1)
-             solution = squeeze(population(pp,:,:));
-             blob = phenotypBlob(solution,size(elefant,1));
-             figure(pp+1); zeigeblob(blob); 
-             grid on; grid minor;
-             title(['Blob Qualität: ' num2str(fitness(pp))]);
-         
-         end
-        
-        figure(size(population,1)+2); hold off; plot(maxfit); hold on;
-        plot(medianFit); xlabel('Generationen'); ylabel('Fitness');axis([0 maxGen 0 100]);
-        figure(size(population,1)+3); plot(distToElite); xlabel('Generationen'); ylabel('Median Distanz zu Elite');axis([0 maxGen 0 3]);
-        %figure(10);imagesc(reshape(population,size(population,1),[]))
         drawnow;
+        
+        % Capture the plot as an image
+        frame = getframe(h);
+        im = frame2im(frame);
+        [imind,cm] = rgb2ind(im,256);
+        % Write to the GIF File
+        imwrite(imind,cm,filename,'gif','WriteMode','append');
+        
+        %for pp=2:size(population,1)
+        %     solution = squeeze(population(pp,:,:));
+        %     blob = phenotypBlob(solution,size(elefant,1),imgGrid);
+        %     figure(pp+1); zeigeblob(blob);
+        %     grid on; grid minor;
+        %     title(['Blob Qualität: ' num2str(fitness(pp))]);
+        %
+        % end
+        
+        %figure(size(population,1)+2); hold off; plot(maxfit); hold on;
+        %plot(medianFit); xlabel('Generationen'); ylabel('Fitness');axis([0 maxGen 0 100]);
+        %figure(size(population,1)+3); plot(distToElite); xlabel('Generationen'); ylabel('Median Distanz zu Elite');axis([0 maxGen 0 3]);
+        %figure(10);imagesc(reshape(population,size(population,1),[]))
+        %drawnow;
         %drawProgress = false;
     end
 end
