@@ -1,7 +1,8 @@
 
 %% % Zeige den Elefanten
-%elefant = logical(imread('elefant-2-100x100.png'));
-elefant = ~logical(imread('myelephant.bmp'));
+elefant = logical(imread('elefant-2-100x100.png'));
+%elefant = ~logical(imread('myelephant.bmp'));
+%elefant = logical(imread('mycircle.png'));
 
 figure(1); imagesc(elefant); 
 
@@ -12,7 +13,7 @@ grid on; grid minor;
                                                                             
 
 %% % Zeige einen Blob
-zahlBlobs = 15;
+zahlBlobs = 20;
 [blob,blobGenen] = baueBlob(zahlBlobs,elefant);
 blob = phenotypBlob(blobGenen,size(elefant,1));
 
