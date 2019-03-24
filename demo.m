@@ -16,10 +16,13 @@ figure(2); imagesc(blob); colormap([0 0 0; 1 1 1]); title('Das ist ein willkürl
 
 %% % Ändere den Blob
 blobSlider;
+title('Wie können wir den Blob anpassen?');
 
 %% % Evolviere den Blob zum Elefanten
+%elefant = logical(imread('mycircle.png'));
+elefant = logical(imread('elefant-50x50.png'));
 zahlBlobs = 100;
-[~,blobGenen] = baueBlob(zahlBlobs,elefant);
+[~,blobGenen] = randomBlob(zahlBlobs,elefant);
 set(0,'DefaultFigureWindowStyle','default')
 %profile on;
 [population,elite,maxfit] = ga(blobGenen,@orakel,elefant);
