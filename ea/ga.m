@@ -2,9 +2,9 @@ function [population,elite,maxfit] = ga(blobExample,orakel,elefant)
 % Setze Konfigurationsvariablen
 %pc = 0.8;
 pm = 2/numel(blobExample);
-mutdist = 0.1;
-popsize = 12;
-maxGen = 1000;
+mutdist = 0.05;
+popsize = 15;
+maxGen = 2000;
 
 tsize = 2;
 drawProgress = true;
@@ -106,7 +106,7 @@ for gen = 1:maxGen
         fitness(s) = orakel(blob,elefant);
     end
     
-    if drawProgress && ~mod(gen,20)
+    if drawProgress && ~mod(gen,10)
         subplot(1,2,2);
         solution = squeeze(population(elite,:,:));
         blob = phenotypBlob(solution,size(elefant,1),imgGrid);

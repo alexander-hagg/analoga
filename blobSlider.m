@@ -44,6 +44,7 @@ genom(2) = hObject.Value;
 blob = phenotypBlob(genom,data.wieGross,data.gridBlobs);
 setappdata(hObject.Parent,'genom',genom);
 imagesc(blob);
+title('Aber wie bestimmen wir die Qualität des Blobs?');
 end
 
 function slider_callback_2(hObject,eventdata)
@@ -54,6 +55,7 @@ genom(3) = hObject.Value;
 blob = phenotypBlob(genom,data.wieGross,data.gridBlobs);
 setappdata(hObject.Parent,'genom',genom);
 imagesc(blob)
+title('Aber wie bestimmen wir die Qualität des Blobs?');
 end
 
 function slider_callback_3(hObject,eventdata)

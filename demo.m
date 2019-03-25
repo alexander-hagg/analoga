@@ -1,5 +1,5 @@
 %% % Zeige den Elefanten
-elefant = logical(imread('elefant-50x50.png'));
+elefant = logical(imread('elefant-50x50-2.png'));
 figure(1); imagesc(elefant); colormap([0 0 0; 1 1 1]); title('Wie entsteht aus einem Blob einen Elefanten?'); grid on; grid minor;
 
 
@@ -20,7 +20,7 @@ title('Wie können wir den Blob anpassen?');
 
 %% % Evolviere den Blob zum Elefanten
 %elefant = logical(imread('mycircle.png'));
-elefant = logical(imread('elefant-50x50.png'));
+elefant = logical(imread('elefant-50x50-2.png'));
 zahlBlobs = 100;
 [~,blobGenen] = randomBlob(zahlBlobs,elefant);
 set(0,'DefaultFigureWindowStyle','default')
