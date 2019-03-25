@@ -6,3 +6,7 @@ The core of the workshop took place offline, off-computer. The code presented
 in this repository represents the digital-to-analogue and analogue-to-digital
 transfer of the presented problem, enabling us to develop the GA with physical 
 (or other) means.
+
+# How to run
+
+Please refer to the demo.m file which contains commented MATLAB code.
