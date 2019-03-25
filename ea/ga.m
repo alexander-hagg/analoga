@@ -37,6 +37,7 @@ subplot(1,2,1);
 zeigeblob(elefant);
 axis tight manual % this ensures that getframe() returns a consistent size
 grid on; grid minor;
+title('Ziel');
 filename = 'testAnimated.gif';
 % Capture the plot as an image
 frame = getframe(h);
@@ -112,7 +113,7 @@ for gen = 1:maxGen
         blob = phenotypBlob(solution,size(elefant,1),imgGrid);
         %subplot(1,2,2);
         zeigeblob(blob);
-        title(['Gen: ' int2str(gen) ' Blob Qualität: ' num2str(maxfit(end)) ' /100']);
+        title(['Generation: ' int2str(gen) ' Qualität: ' num2str(sprintf('%0.2f', maxfit(end))) '%']);
         drawnow;
         
         % Capture the plot as an image
