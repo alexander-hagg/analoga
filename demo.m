@@ -17,7 +17,7 @@ elefant = logical(imread('elefant-50x50-2.png'));
 figure(1); imagesc(elefant); colormap([0 0 0; 1 1 1]); title('Wie entsteht aus einem Blob einen Elefanten?'); grid on; grid minor;
 
 
-%% % Zeige den Kreis
+%% % Zeige einen Kreis
 elefant = logical(imread('mycircle.png'));
 figure(1); imagesc(elefant); colormap([0 0 0; 1 1 1]); title('Versuchen wir zuerst einen runden Blob zu bilden.'); grid on; grid minor;
 
@@ -33,6 +33,9 @@ figure(2); imagesc(blob); colormap([0 0 0; 1 1 1]); title('Das ist ein willkürl
 blobSlider;
 title('Wie können wir den Blob anpassen?');
 
+%% %
+%% % INTERAKTIVER SESSION
+%% %
 
 %% % Evolviere den Blob zum Elefanten
 %elefant = logical(imread('mycircle.png'));

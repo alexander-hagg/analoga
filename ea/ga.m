@@ -1,8 +1,8 @@
 function [population,elite,maxfit] = ga(blobExample,orakel,elefant)
 % Setze Konfigurationsvariablen
 %pc = 0.8;
-pm = 2/numel(blobExample);
-mutdist = 0.05;
+pm = 3/numel(blobExample);
+mutdist = 0.1;
 popsize = 15;
 maxGen = 2000;
 
@@ -108,6 +108,7 @@ for gen = 1:maxGen
     end
     
     if drawProgress && ~mod(gen,10)
+        figure(1);
         subplot(1,2,2);
         solution = squeeze(population(elite,:,:));
         blob = phenotypBlob(solution,size(elefant,1),imgGrid);
@@ -123,14 +124,16 @@ for gen = 1:maxGen
         % Write to the GIF File
         imwrite(imind,cm,filename,'gif','WriteMode','append');
         
-        %for pp=2:size(population,1)
-        %     solution = squeeze(population(pp,:,:));
-        %     blob = phenotypBlob(solution,size(elefant,1),imgGrid);
-        %     figure(pp+1); zeigeblob(blob);
-        %     grid on; grid minor;
-        %     title(['Blob Qualität: ' num2str(fitness(pp))]);
-        %
-        % end
+        showNumMembers = 9; %size(population,1);
+        for pp=1:showNumMembers
+             solution = squeeze(population(pp,:,:));
+             blob = phenotypBlob(solution,size(elefant,1),imgGrid);
+             figure(2); 
+             subplot(floor(sqrt(showNumMembers)),ceil(sqrt(showNumMembers)),pp);
+             zeigeblob(blob);
+             grid on; grid minor;
+             title(['Blob Qualität: ' num2str(fitness(pp))]);
+        end
         
         %figure(size(population,1)+2); hold off; plot(maxfit); hold on;
         %plot(medianFit); xlabel('Generationen'); ylabel('Fitness');axis([0 maxGen 0 100]);
