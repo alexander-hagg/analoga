@@ -1,4 +1,4 @@
-function [population,elite,maxfit] = ga(blobExample,orakel,elefant)
+function [population,elite,maxfit] = ga(blobExample,orakel,elefant,showFrames)
 % Setze Konfigurationsvariablen
 %pc = 0.8;
 pm = 3/numel(blobExample);
@@ -107,7 +107,7 @@ for gen = 1:maxGen
         fitness(s) = orakel(blob,elefant);
     end
     
-    if drawProgress && ~mod(gen,10)
+    if drawProgress && ~mod(gen,showFrames)
         figure(1);
         subplot(1,2,2);
         solution = squeeze(population(elite,:,:));

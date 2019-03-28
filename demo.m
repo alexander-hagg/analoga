@@ -43,7 +43,7 @@ elefant = logical(imread('elefant-50x50-2.png'));
 zahlBlobs = 100;
 [~,blobGenen] = randomBlob(zahlBlobs,elefant);
 set(0,'DefaultFigureWindowStyle','default')
-[population,elite,maxfit] = ga(blobGenen,@orakel,elefant);
+[population,elite,maxfit] = ga(blobGenen,@orakel,elefant,10);
 solution = squeeze(population(elite,:,:));
 
 
